@@ -1,6 +1,8 @@
 package ru.dragonestia.achievement;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
+import ru.dragonestia.achievement.command.AchievementsCommand;
 import ru.dragonestia.achievement.manager.PlayerAchievementManager;
 import ru.nukkitx.forms.elements.SimpleForm;
 
@@ -11,6 +13,8 @@ public abstract class Achievement {
     public abstract String getName();
 
     public abstract String getDescription();
+
+    public abstract String getIcon();
 
     public abstract Difficulty getDifficulty();
 
@@ -27,7 +31,12 @@ public abstract class Achievement {
                         ))
                 .addContentLine("Сложность: §b" + getDifficulty().getName() + "§f")
                 .addContentLine("Описание: §3" + getDescription() + "§f")
-                .send(player);
+                .addButton("Назад")
+                .send(player, (target, form, data) -> {
+                    if(data == -1) return;
+
+                    AchievementsCommand.sendMainForm(target);
+                });
     }
 
     public int getPoints(PlayerAchievementManager manager){
